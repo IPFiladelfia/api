@@ -1,0 +1,12 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Church {
+  id: String!
+  name: String!
+}
+
+type Query {
+  findAllChurches: [Church!]!
+}
