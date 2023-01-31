@@ -3,7 +3,8 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { ChurchModule } from './church/church.module';
+import { UsersModule } from './users/users.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -17,11 +18,12 @@ import { ChurchModule } from './church/church.module';
       port: 5432,
       username: 'guilhermeramos',
       password: 'guilhermeramos',
-      database: 'churchadm-local-db',
+      database: 'filadelfia-local-db',
       autoLoadEntities: true,
       synchronize: true,
     }),
-    ChurchModule,
+    UsersModule,
+    DatabaseModule,
   ],
 })
 export class AppModule {}

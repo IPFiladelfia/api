@@ -2,11 +2,38 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Church {
-  id: String!
+type User {
   name: String!
+  email: String!
+  password: String!
+  phone: String
+  userType: String!
 }
 
 type Query {
-  findAllChurches: [Church!]!
+  users: [User!]!
+  user(id: Int!): User!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+}
+
+input CreateUserInput {
+  email: String!
+  phone: String
+  name: String!
+  password: String!
+  userType: String
+}
+
+input UpdateUserInput {
+  email: String
+  phone: String
+  name: String
+  password: String
+  userType: String
+  id: Float!
 }
