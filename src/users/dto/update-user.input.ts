@@ -6,5 +6,5 @@ import { IsUUID } from 'class-validator';
 export class UpdateUserInput extends PartialType(CreateUserInput) {
   @Field()
   @IsUUID('4')
-  id: number;
+  id: string;
 }

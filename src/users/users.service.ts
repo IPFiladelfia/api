@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserType } from 'src/shared/enums';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
@@ -50,12 +54,20 @@ export class UsersService {
     return await this.userRepository.findOneBy({ id });
   }
 
-  // update(id: string, updateUserInput: UpdateUserInput) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    let user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException('Esse usuário não foi encontrado');
+
+    user = { ...user, ...updateUserInput };
+
+    await this.userRepository.save(user);
+    return user;
+  }
 
   async remove(id: string): Promise<string> {
-    await this.userRepository.delete({ id });
+    const affectedAccounts = await this.userRepository.delete({ id });
+    if (!affectedAccounts.affected)
+      throw new NotFoundException('Esse usuário não foi encontrado');
     return `Usuário deletado com sucesso.`;
   }
 }
