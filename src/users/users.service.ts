@@ -33,7 +33,6 @@ export class UsersService {
       phone,
       userType: userType ?? UserType.USER,
     });
-    console.log('user', user);
     await this.userRepository.save(user);
     return user;
   }
