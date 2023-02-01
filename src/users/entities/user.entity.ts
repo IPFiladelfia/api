@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { BaseEntity } from 'src/shared/entities/BaseEntity';
 import { UserType } from 'src/shared/enums';
 import { Column, Entity } from 'typeorm';

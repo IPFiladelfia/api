@@ -11,12 +11,13 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { UserFilters } from './dto/user-filters.dto';
 import { User } from './entities/user.entity';
 import { genSalt, hash } from 'bcrypt';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject('USERS_REPOSITORY')
-    private usersRepository: Repository<User>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async create(createUserInput: CreateUserInput) {
@@ -26,26 +27,23 @@ export class UsersService {
       throw new ConflictException(
         'O email já está sendo utilizado em outra conta',
       );
-
     const encryptedPassword = await hash(
       password,
       parseInt(process.env.SALT_ROUNDS),
     );
-
-    const user = this.usersRepository.create({
+    const user = this.userRepository.create({
       email,
       name,
       password: encryptedPassword,
       phone,
       userType: userType ?? UserType.USER,
     });
-
-    await this.usersRepository.save(user);
+    await this.userRepository.save(user);
     return user;
   }
 
   async findAll(filters?: UserFilters) {
-    const query = this.usersRepository.createQueryBuilder();
+    const query = this.userRepository.createQueryBuilder();
     query.where('1 = 1');
     if (filters?.email) {
       query.andWhere('email = :email', { email: filters.email });
