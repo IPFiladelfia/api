@@ -3,7 +3,7 @@ import { BaseEntity } from 'src/shared/entities/BaseEntity';
 import { UserType } from 'src/shared/enums';
 import { Column, Entity } from 'typeorm';
 
-@Entity()
+@Entity('users')
 @ObjectType()
 export class User extends BaseEntity {
   @Field()
