@@ -11,15 +11,28 @@ type User {
   userType: String!
 }
 
+type StaffMember {
+  id: String!
+  name: String
+  description: String
+  title: String
+  thumbnailUrl: String
+  status: String!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
+  staff(id: Int!): StaffMember!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): String!
+  createStaff(createStaffInput: CreateStaffInput!): StaffMember!
+  updateStaff(updateStaffInput: UpdateStaffInput!): StaffMember!
+  removeStaff(id: Int!): StaffMember!
 }
 
 input CreateUserInput {
@@ -37,4 +50,15 @@ input UpdateUserInput {
   password: String
   userType: String
   id: String!
+}
+
+input CreateStaffInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateStaffInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
