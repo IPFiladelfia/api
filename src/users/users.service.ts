@@ -1,8 +1,7 @@
 import {
-  BadRequestException,
   ConflictException,
-  Inject,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserType } from 'src/shared/enums';
 import { Repository } from 'typeorm';
@@ -10,7 +9,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserFilters } from './dto/user-filters.dto';
 import { User } from './entities/user.entity';
-import { genSalt, hash } from 'bcrypt';
+import { hash } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -20,7 +19,7 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
-  async create(createUserInput: CreateUserInput) {
+  async create(createUserInput: CreateUserInput): Promise<User> {
     const { email, name, password, phone, userType } = createUserInput;
     const [emailAlreadyInUse] = await this.findAll({ email });
     if (emailAlreadyInUse)
@@ -42,7 +41,7 @@ export class UsersService {
     return user;
   }
 
-  async findAll(filters?: UserFilters) {
+  async findAll(filters?: UserFilters): Promise<User[]> {
     const query = this.userRepository.createQueryBuilder();
     query.where('1 = 1');
     if (filters?.email) {
@@ -51,15 +50,24 @@ export class UsersService {
     return await query.getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string): Promise<User> {
+    return await this.userRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    let user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException('Esse usuário não foi encontrado');
+
+    user = { ...user, ...updateUserInput };
+
+    await this.userRepository.save(user);
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string): Promise<string> {
+    const affectedAccounts = await this.userRepository.delete({ id });
+    if (!affectedAccounts.affected)
+      throw new NotFoundException('Esse usuário não foi encontrado');
+    return `Usuário deletado com sucesso.`;
   }
 }
