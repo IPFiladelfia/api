@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { StaffModule } from './staff/staff.module';
+import { MinistriesModule } from './ministries/ministries.module';
 
 @Module({
   imports: [
@@ -14,9 +15,9 @@ import { StaffModule } from './staff/staff.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       port: parseInt(process.env.DB_PORT),
-      database: process.env.DB_DATABASE,
+      database: 'filadelfia-local-db',
       autoLoadEntities: true,
-      synchronize: false,
+      synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -24,6 +25,7 @@ import { StaffModule } from './staff/staff.module';
     }),
     UsersModule,
     StaffModule,
+    MinistriesModule,
   ],
 })
 export class AppModule {}

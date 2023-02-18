@@ -1,15 +1,18 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { StaffService } from './staff.service';
-import { StaffMember } from './entities/staff.entity';
+import { StaffMember } from './staff.entity';
 import { CreateStaffInput } from './dto/create-staff.input';
 import { UpdateStaffInput } from './dto/update-staff.input';
+import { isArray } from 'class-validator';
 
 @Resolver(() => StaffMember)
 export class StaffResolver {
   constructor(private readonly staffService: StaffService) {}
 
   @Mutation(() => StaffMember)
-  createStaff(@Args('createStaffInput') createStaffInput: CreateStaffInput) {
+  createStaff(
+    @Args('createStaffInput') createStaffInput: CreateStaffInput,
+  ): Promise<StaffMember> {
     return this.staffService.create(createStaffInput);
   }
 
@@ -19,7 +22,7 @@ export class StaffResolver {
   }
 
   @Query(() => StaffMember, { name: 'staff' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.staffService.findOne(id);
   }
 
@@ -29,7 +32,7 @@ export class StaffResolver {
   }
 
   @Mutation(() => StaffMember)
-  removeStaff(@Args('id', { type: () => Int }) id: number) {
+  removeStaff(@Args('id', { type: () => String }) id: string) {
     return this.staffService.remove(id);
   }
 }

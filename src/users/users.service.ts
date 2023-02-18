@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserFilters } from './dto/user-filters.dto';
-import { User } from './entities/user.entity';
+import { User } from './user.entity';
 import { hash } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -35,7 +35,7 @@ export class UsersService {
       name,
       password: encryptedPassword,
       phone,
-      userType: userType ?? UserType.USER,
+      type: userType ?? UserType.USER,
     });
     await this.userRepository.save(user);
     return user;

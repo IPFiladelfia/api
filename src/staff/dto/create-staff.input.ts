@@ -4,9 +4,8 @@ import { PageStatus, StaffTitle } from 'src/shared/enums';
 
 @InputType()
 export class CreateStaffInput {
-  @IsOptional()
-  @Field({ nullable: true })
-  name?: string;
+  @Field()
+  name: string;
 
   @IsOptional()
   @Field({ nullable: true })

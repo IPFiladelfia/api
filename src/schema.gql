@@ -8,22 +8,29 @@ type User {
   email: String!
   password: String!
   phone: String
-  userType: String!
+  type: String!
 }
 
 type StaffMember {
   id: String!
-  name: String
+  name: String!
   description: String
   title: String
   thumbnailUrl: String
   status: String!
 }
 
+type Ministry {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
-  staff(id: Int!): StaffMember!
+  staff(id: String!): StaffMember!
+  ministries: [Ministry!]!
+  ministry(id: Int!): Ministry!
 }
 
 type Mutation {
@@ -32,7 +39,10 @@ type Mutation {
   removeUser(id: String!): String!
   createStaff(createStaffInput: CreateStaffInput!): StaffMember!
   updateStaff(updateStaffInput: UpdateStaffInput!): StaffMember!
-  removeStaff(id: Int!): StaffMember!
+  removeStaff(id: String!): StaffMember!
+  createMinistry(createMinistryInput: CreateMinistryInput!): Ministry!
+  updateMinistry(updateMinistryInput: UpdateMinistryInput!): Ministry!
+  removeMinistry(id: Int!): Ministry!
 }
 
 input CreateUserInput {
@@ -53,11 +63,28 @@ input UpdateUserInput {
 }
 
 input CreateStaffInput {
+  name: String!
+  description: String
+  title: String
+  thumbnailUrl: String
+  status: String = "draft"
+}
+
+input UpdateStaffInput {
+  name: String
+  description: String
+  title: String
+  thumbnailUrl: String
+  status: String = "draft"
+  id: String!
+}
+
+input CreateMinistryInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
-input UpdateStaffInput {
+input UpdateMinistryInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

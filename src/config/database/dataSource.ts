@@ -1,5 +1,5 @@
-import { StaffMember } from 'src/staff/entities/staff.entity';
-import { User } from 'src/users/entities/user.entity';
+import { StaffMember } from 'src/staff/staff.entity';
+import { User } from 'src/users/user.entity';
 import { DataSource } from 'typeorm';
 import { CreateUsersTable1675211367487 } from './migrations/1675211367487-CreateUsersTable';
 import { CreateStaffMembersTable1675363179516 } from './migrations/1675363179516-CreateStaffMembersTable';

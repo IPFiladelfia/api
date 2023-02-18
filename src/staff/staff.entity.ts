@@ -9,9 +9,9 @@ export class StaffMember {
   @Field()
   id: string;
 
-  @Field({ nullable: true })
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  name?: string;
+  @Field()
+  @Column({ type: 'varchar', length: 100 })
+  name: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 255, nullable: true })

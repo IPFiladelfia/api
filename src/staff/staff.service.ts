@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { joinArrayWithAnd } from 'src/shared/utils';
 import { Repository } from 'typeorm';
 import { CreateStaffInput } from './dto/create-staff.input';
 import { UpdateStaffInput } from './dto/update-staff.input';
-import { StaffMember } from './entities/staff.entity';
+import { StaffMember } from './staff.entity';
 
 @Injectable()
 export class StaffService {
@@ -12,27 +13,45 @@ export class StaffService {
     private staffRepository: Repository<StaffMember>,
   ) {}
 
-  create(createStaffInput: CreateStaffInput) {
-    return 'This action adds a new staff';
-  }
+  async create(createStaffInput: CreateStaffInput) {
+    const { name, status, description, thumbnailUrl, title } = createStaffInput;
+    const staffMember = this.staffRepository.create({
+      name,
+      status,
+      description,
+      thumbnailUrl,
+      title,
+    });
 
-  createMany(createStaffInputArray: CreateStaffInput[]) {
-    return 'This action adds a new staff';
+    await this.staffRepository.save(staffMember);
+    return staffMember;
   }
 
   findAll() {
-    return `This action returns all staff`;
+    return this.staffRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} staff`;
+  findOne(id: string) {
+    return this.staffRepository.findOneByOrFail({ id });
   }
 
-  update(id: number, updateStaffInput: UpdateStaffInput) {
-    return `This action updates a #${id} staff`;
+  update(id: string, updateStaffInput: UpdateStaffInput) {
+    const staffMember = this.findOne(id);
+    if (!staffMember) throw new NotFoundException('Membro não encontrado');
+
+    const objectToUpdate = {};
+
+    Object.keys(updateStaffInput).forEach((key) => {
+      objectToUpdate[key] = updateStaffInput[key];
+    });
+
+    return this.staffRepository.update({ id }, objectToUpdate);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} staff`;
+  async remove(id: string) {
+    const deleted = await this.staffRepository.delete({ id });
+    if (deleted.affected === 0)
+      throw new NotFoundException('Membro não encontrado');
+    return `Membro ${id} deletado com sucesso`;
   }
 }
