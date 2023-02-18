@@ -12,7 +12,7 @@ export class CreateUsersTable1675211367487 implements MigrationInterface {
             email varchar(255) UNIQUE NOT NULL,
             password varchar(60) NOT NULL,
             phone varchar(15),
-            "userType" USER_TYPE_ENUM NOT NULL
+            type USER_TYPE_ENUM NOT NULL
         )`);
   }
 

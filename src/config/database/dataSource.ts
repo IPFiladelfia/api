@@ -1,6 +1,15 @@
-import { User } from 'src/users/entities/user.entity';
+import { StaffMember } from 'src/staff/staff.entity';
+import { User } from 'src/users/user.entity';
 import { DataSource } from 'typeorm';
 import { CreateUsersTable1675211367487 } from './migrations/1675211367487-CreateUsersTable';
+import { CreateStaffMembersTable1675363179516 } from './migrations/1675363179516-CreateStaffMembersTable';
+
+const migrations = [
+  CreateUsersTable1675211367487,
+  CreateStaffMembersTable1675363179516,
+];
+
+const entities = [User, StaffMember];
 
 export default new DataSource({
   type: 'postgres',
@@ -9,6 +18,6 @@ export default new DataSource({
   password: process.env.PASSWORD,
   port: parseInt(process.env.PORT),
   database: 'filadelfia-local-db',
-  migrations: [CreateUsersTable1675211367487],
-  entities: [User],
+  migrations,
+  entities,
 });

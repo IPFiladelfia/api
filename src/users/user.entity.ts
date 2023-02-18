@@ -10,22 +10,22 @@ export class User {
   id: string;
 
   @Field()
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   name: string;
 
   @Field()
-  @Column()
+  @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
   @Field()
-  @Column()
+  @Column({ type: 'varchar', length: 60 })
   password: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'varchar', length: 15 })
   phone?: string;
 
   @Field({ defaultValue: UserType.USER })
-  @Column({ default: UserType.USER })
-  userType: UserType;
+  @Column({ default: UserType.USER, type: 'enum', enum: UserType })
+  type: UserType;
 }
